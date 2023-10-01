@@ -6,6 +6,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.Administrator.entity.User;
 import com.example.Administrator.mapper.UserMapper;
+import com.example.Administrator.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -25,6 +26,9 @@ public class TokenUtils {
 
     @Resource
     UserMapper userMapper;
+
+
+    private static UserService staticUserService;
 
     @PostConstruct
     public void setUserService() {
@@ -46,7 +50,7 @@ public class TokenUtils {
             String token = request.getHeader("token");
             if (StrUtil.isNotBlank(token)) {
                 String userId = JWT.decode(token).getAudience().get(0);
-                return staticUserMapper.selectUserById(Integer.valueOf(userId));
+                return staticUserService.getById(Integer.valueOf(userId));
             }
         } catch (Exception e) {
             return null;

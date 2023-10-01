@@ -14,7 +14,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport {
         // configure jwt interceptor rules - addInterceptor(jwtInterceptor())
         registry.addInterceptor(jwtInterceptor()).addPathPatterns("/**")
 //        so far, all path has been blocked, so we need configure something becoming block all paths except login
-        .excludePathPatterns("/login","/Register");
+        .excludePathPatterns("/login");
         super.addInterceptors(registry);
     }
 

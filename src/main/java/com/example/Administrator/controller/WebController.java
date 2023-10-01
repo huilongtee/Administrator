@@ -72,12 +72,12 @@ public class WebController {
         return Result.success(user);
     }
 
-//    @AuthAccess to make the path open, not restricted
+    //    @AuthAccess to make the path open, not restricted
     @AuthAccess
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
 //        must import hutool to use StrUtil
-        if (StrUtil.isBlank(user.getUsername()) || StrUtil.isBlank(user.getPassword())) {
+        if (StrUtil.isBlank(user.getUsername()) || StrUtil.isBlank(user.getPassword()) || StrUtil.isBlank(user.getRole())) {
             return Result.error("Please make sure all fill has been filled");
         }
         if (user.getUsername().length() > 15) {
@@ -86,7 +86,27 @@ public class WebController {
         if (user.getPassword().length() > 15) {
             return Result.error("The password length must be less than 15 characters");
         }
+
+        user.setRole(user.getRole().toLowerCase());
+
+
         user = userService.register(user);
+        return Result.success(user);
+    }
+
+    //reset password
+    @AuthAccess
+    @PutMapping("/password")
+    public Result resetPassword(@RequestBody User user) {
+
+        if (StrUtil.isBlank(user.getUsername()) || StrUtil.isBlank(user.getPhone())) {
+            return Result.error("Please make sure all fill has been filled");
+        }
+
+
+        user=userService.resetPassword(user);
+
+
         return Result.success(user);
     }
 }

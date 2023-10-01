@@ -9,6 +9,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.Administrator.entity.User;
 import com.example.Administrator.exception.ServiceException;
 import com.example.Administrator.mapper.UserMapper;
+import com.example.Administrator.service.UserService;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class JwtInterceptor implements HandlerInterceptor {
 
     @Resource
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -51,7 +52,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
 
 //        get the userId from token and get the User from database
-        User user = userMapper.selectUserById(Integer.valueOf(userId));
+        User user = userService.getById(Integer.valueOf(userId));
         if (user == null) {
             throw new ServiceException("401", "Please login");
         }
